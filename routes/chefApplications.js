@@ -5,25 +5,16 @@ const router = express.Router();
 // POST /api/chefs
 router.post('/', async (req, res) => {
     try {
-        const applicationData = req.body;
-        console.log('Received application:', applicationData);
-
-        // Create a new application in MongoDB
-        const newApplication = new ChefApplication(applicationData);
+        const newApplication = new ChefApplication(req.body);
         await newApplication.save();
-
-        res.status(201).json({
-            success: true,
-            message: 'Application received successfully',
-            data: newApplication
-        });
+        res.status(201).json({ success: true, message: 'Application submitted successfully' });
     } catch (error) {
-        console.error('Error processing application:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Error processing application',
-            error: error.message
-        });
+        if (error.message.includes('already exists')) {
+            res.status(400).json({ success: false, message: error.message });
+        } else {
+            console.error('Error submitting application:', error);
+            res.status(500).json({ success: false, message: 'Failed to submit application' });
+        }
     }
 });
 
