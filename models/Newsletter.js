@@ -6,7 +6,8 @@ const newsletterSchema = new mongoose.Schema({
         required: true,
         unique: true,
         trim: true,
-        lowercase: true
+        lowercase: true,
+        unique: true 
     },
     subscribedAt: {
         type: Date,
