@@ -18,7 +18,7 @@ chefApplicationSchema.pre('save', async function(next) {
     // Check for duplicate email
     const existingEmail = await mongoose.model('ChefApplication').findOne({ email: application.email });
     if (existingEmail) {
-        const error = new Error('Email already exists');
+        const error = new Error('This email address is already registered. Please use a different email.');
         error.status = 400;
         return next(error);
     }
@@ -26,7 +26,7 @@ chefApplicationSchema.pre('save', async function(next) {
     // Check for duplicate contact number
     const existingContact = await mongoose.model('ChefApplication').findOne({ contactNumber: application.contactNumber });
     if (existingContact) {
-        const error = new Error('Contact number already exists');
+        const error = new Error('This phone number is already registered. Please use a different number.');
         error.status = 400;
         return next(error);
     }

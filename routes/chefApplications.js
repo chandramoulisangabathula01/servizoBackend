@@ -11,6 +11,10 @@ router.post('/', async (req, res) => {
     } catch (error) {
         if (error.message.includes('already exists')) {
             res.status(400).json({ success: false, message: error.message });
+        } else if (error.name === 'ValidationError') {
+            // Handle Mongoose validation errors
+            const messages = Object.values(error.errors).map(val => val.message);
+            res.status(400).json({ success: false, message: messages.join(', ') });
         } else {
             console.error('Error submitting application:', error);
             res.status(500).json({ success: false, message: 'Failed to submit application' });
